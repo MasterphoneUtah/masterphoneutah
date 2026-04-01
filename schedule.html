@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Book Appointment</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  background: black;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+/* TITLE */
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+
+  background: linear-gradient(90deg, #5fb8ff, #9be7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 10px rgba(95,184,255,.8),
+               0 0 25px rgba(95,184,255,.5);
+}
+
+/* subtitle */
+.subtitle {
+  font-size: 20px;
+  color: #9ca3af;
+}
+</style>
+
+<!-- ✅ IMPORTANT: Calendly script (NO async) -->
+<script src="https://assets.calendly.com/assets/external/widget.js"></script>
+
+</head>
+
+<body>
+
+<!-- TITLE -->
+<div class="text-center py-14">
+
+  <h1 class="title"
+  data-en="Book Your Repair" 
+  data-es="Reserva tu reparación">
+  Book Your Repair
+  </h1>
+
+  <p class="subtitle mt-4"
+  data-en="Choose a time that works for you" 
+  data-es="Elige un horario que te funcione">
+  Choose a time that works for you
+  </p>
+
+</div>
+
+<!-- CALENDLY -->
+<div class="max-w-4xl mx-auto px-4">
+  <div id="calendlyWrapper" style="min-width:320px;height:100vh;max-height:1000px;"></div>
+</div>
+
+<!-- PHONE -->
+<!-- <div class="mt-10 text-left text-lg px-6">
+  <p class="text-gray-400"
+     data-en="Issues booking? Call or text us."
+     data-es="¿Problemas al reservar? Llámanos o envíanos un mensaje.">
+    Issues booking? Call or text us.
+  </p>
+
+  <p class="text-cyan-400 text-2xl font-bold mt-2">
+    (786) 516-8016
+  </p>
+</div> -->
+
+<!-- FLOAT BUTTON -->
+<div class="fixed bottom-6 right-6 z-50">
+  <div class="relative">
+
+    <button onclick="toggleMenu()"
+    class="bg-cyan-500 px-6 py-4 rounded-full shadow-xl text-white font-bold hover:scale-105 transition"
+    data-en="Message"
+    data-es="Mensaje">
+    Message
+    </button>
+
+    <div id="messageMenu" class="hidden absolute bottom-16 right-0 flex-col gap-3">
+
+      <a href="sms:17865168016"
+      class="block bg-blue-500 text-white px-5 py-3 rounded-xl shadow-lg"
+      data-en="SMS"
+      data-es="SMS">
+      SMS
+      </a>
+
+      <a href="https://wa.me/17865168016"
+      class="block bg-green-500 text-white px-5 py-3 rounded-xl shadow-lg"
+      data-en="WhatsApp"
+      data-es="WhatsApp">
+      WhatsApp
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+let currentLang = "en";
+
+/* LOAD PAGE */
+window.onload = function () {
+  const params = new URLSearchParams(window.location.search);
+  const urlLang = params.get("lang");
+  const savedLang = localStorage.getItem("lang");
+
+  const langToUse = urlLang || savedLang || "en";
+
+  switchLanguage(langToUse);
+  loadCalendly(langToUse);
+};
+
+/* ✅ CORRECT CALENDLY LOAD */
+function loadCalendly(lang) {
+  const wrapper = document.getElementById("calendlyWrapper");
+  wrapper.innerHTML = "";
+
+  Calendly.initInlineWidget({
+    url: "https://calendly.com/masterphoneutah",
+    parentElement: wrapper,
+    locale: lang === "es" ? "es" : "en"
+  });
+}
+
+/* LANGUAGE SWITCH */
+function switchLanguage(lang) {
+  currentLang = lang;
+
+  localStorage.setItem("lang", lang);
+
+  document.querySelectorAll("[data-en]").forEach(el => {
+    el.textContent = el.getAttribute("data-" + lang);
+  });
+
+  loadCalendly(lang);
+}
+
+/* MENU */
+function toggleMenu(){
+  const menu = document.getElementById("messageMenu");
+  if(menu) menu.classList.toggle("hidden");
+}
+</script>
+
+</body>
+</html>
